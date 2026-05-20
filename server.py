@@ -204,6 +204,7 @@ def get_transactions():
         transaction_date
     FROM transactions
     ORDER BY transaction_date DESC
+    LIMIT 20
     """)
 
     records = cursor.fetchall()
