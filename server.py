@@ -20,6 +20,8 @@ sms_sender TEXT,
 transaction_date TEXT)""");
 
 connection.commit();
+cursor.close()
+connection.close()
 
 @app.get("/")
 def home():
@@ -149,6 +151,8 @@ def identify_sensitive_fields(sms):
 
 @app.post("/sms")
 def receive_sms(data: dict):
+    conn = sqlite3.connect("expense.db")
+    cursor = conn.cursor()
 
     sms = data["sms_body"]
     parsed_data = parse_transaction(sms)
@@ -180,7 +184,9 @@ def receive_sms(data: dict):
             sms_date
         )
     )
-    connection.commit()
+    conn.commit()
+    cursor.close()
+    conn.close()
 
     return {
         "status": "success"
@@ -189,6 +195,8 @@ def receive_sms(data: dict):
 
 @app.get("/transactions")
 def get_transactions():
+    conn = sqlite3.connect("expense.db")
+    cursor = conn.cursor()
 
     cursor.execute("""
 
@@ -223,6 +231,9 @@ def get_transactions():
             "sms_sender": record[7],
             "transaction_date": record[8]
         })
+
+    cursor.close()
+    conn.close()
 
     return {
         "transactions": transactions
