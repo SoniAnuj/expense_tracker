@@ -2,8 +2,12 @@ from fastapi import FastAPI;
 import sqlite3;
 import re;
 import hashlib;
+import os;
 
 app = FastAPI()
+
+if os.path.exists("expense.db"):
+    os.remove("expense.db")
 
 connection = sqlite3.connect("expense.db",check_same_thread=False);
 cursor = connection.cursor();
