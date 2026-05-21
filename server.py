@@ -1,6 +1,7 @@
 from fastapi import FastAPI;
 import sqlite3;
 import re;
+import hashlib;
 
 app = FastAPI()
 
@@ -9,6 +10,7 @@ cursor = connection.cursor();
 
 cursor.execute("""CREATE TABLE IF NOT EXISTS transactions(\
 id INTEGER PRIMARY KEY AUTOINCREMENT, \
+sms_hash TEXT unique, \
 sms_body TEXT NOT NULL, \
 amount REAL, \
 transaction_type TEXT, \
@@ -26,6 +28,10 @@ connection.close()
 @app.get("/")
 def home():
     return {"message":"Server running"};
+
+def generate_sms_hash(sms,sms_date,sms_sender):
+    raw = f"{sms}_{sms_date}_{sms_sender}"
+    return hashlib.md5(raw.encode()).hexdigest()
 
 def detect_transaction_type(sms):
     sms_lower = sms.lower()
@@ -158,10 +164,12 @@ def receive_sms(data: dict):
     parsed_data = parse_transaction(sms)
     sms_date = data["sms_date"]
     sms_sender = data["sms_sender"]
+    sms_hash = generate_sms_hash(sms,sms_date,sms_sender)
 
     cursor.execute("""
-        INSERT INTO transactions(
+        INSERT OR IGNORE INTO transactions(
             sms_body,
+            sms_hash,
             amount,
             transaction_type,
             merchant,
@@ -171,9 +179,10 @@ def receive_sms(data: dict):
             sms_sender,
             transaction_date
         )
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         """,(
             sms,
+            sms_hash,
             parsed_data["amount"],
             parsed_data["transaction_type"],
             parsed_data["merchant"],
