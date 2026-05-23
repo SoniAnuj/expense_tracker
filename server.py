@@ -126,19 +126,21 @@ def identify_category(sms):
     sms_lower = sms.lower()
 
     category_rules = {
-        "FOOD": ["restaurant", "cafe", "food", "dining", "pizza", "burger", "meal","zomato","swiggy"],
-        "GROCERY": ["grocery", "supermarket", "store", "mart","bigbasket"],
-        "ENTERTAINMENT": ["movie", "cinema", "theater", "concert", "entertainment","netflix","spotify"],
-        "TRAVEL": ["taxi", "cab", "uber", "lyft", "transport","bus","train","irctc"],
-        "BILLS": ["electricity", "water", "gas", "bill","phone","internet"],
-        "SHOPPING": ["mall", "shopping", "store", "boutique","amazon","flipkart","myntra"],
-        "HEALTH": ["pharmacy", "hospital", "clinic", "health","medical"],
-        "EDUCATION": ["school", "college", "education", "course","unacademy","coursera"],
-        "SALARY": ["salary", "payroll", "income", "credit"],
-        "INVESTMENT": ["investment", "mutual fund", "stock", "sip","nse","bse"],
-        "LOAN": ["loan", "emi", "bank", "debit"],
-        "OTHER": []
-    }
+        "FOOD":["zomato","swiggy","dominos","pizza","burger","restaurant","cafe","starbucks","mcdonald"],
+        "GROCERY":["bigbasket","blinkit","zepto","dmart","grocery","supermarket"],
+        "ENTERTAINMENT":["netflix","spotify","prime video","hotstar","movie","cinema","bookmyshow","ott"],
+        "TRAVEL":["uber","ola","rapido","irctc","metro","flight","makemytrip","yatra"],
+        "BILLS":["electricity","water","gas","recharge","broadband","internet","postpaid","prepaid","dth"],
+        "SHOPPING":["amazon","flipkart","myntra","ajio","nykaa","shopping"],
+        "HEALTH":["apollo","pharmacy","hospital","clinic","medical","1mg","netmeds"],
+        "EDUCATION":["unacademy","coursera","udemy","school","college","tuition","fees"],
+        "SALARY":["salary","payroll","salary credited"],
+        "INVESTMENT":["mutual fund","sip","zerodha","groww","upstox","nse","bse"],
+        "LOAN":["emi","loan repayment","personal loan","home loan","car loan"],
+        "TRANSFER":["upi","imps","neft","rtgs"],
+        "ATM":["atm withdrawal","cash withdrawal"],
+        "OTHER":[]
+        }
 
     for category, keywords in category_rules.items():
         for keyword in keywords:
